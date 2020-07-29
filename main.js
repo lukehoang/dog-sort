@@ -1,3 +1,9 @@
+//Dog logo movement
+$(document).ready(function(){
+    setInterval(function(){ 
+        $('.dog').toggleClass('animated');
+     }, 500);
+});
 //Create Breeds list
 $(document).ready(function(){
 
