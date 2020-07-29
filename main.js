@@ -75,7 +75,11 @@ function createView(selected){
                 $('#pagination').html("");
                 $('#pagination').removeClass('d-none');
                 for(let i = 1; i <= number_of_pages; i++){
-                    $('#pagination').append('<li class="page-item"><a class="page-link" onclick="pageUpdate(' + i + ');">' + i + '</a></li>');
+                    if(i == 1){
+                        $('#pagination').append('<li class="page-item"><a class="page-link active" id="page-link-'+i+'" onclick="pageUpdate(' + i + ');">' + i + '</a></li>');
+                    }else{
+                        $('#pagination').append('<li class="page-item"><a class="page-link" id="page-link-'+i+'" onclick="pageUpdate(' + i + ');">' + i + '</a></li>');
+                    }
                 }
 
             }else{
@@ -89,7 +93,7 @@ function createView(selected){
                 results.append('<div class="col-xl-3 col-md-6 mb-4">'
                                     +'<div class="card border-0 shadow">'
                                         +'<div class="bg-image" style="background-image: url('+image+');">'
-                                            +'<a data-lity href="'+image+'"></a>'
+                                            +'<a data-lity href="'+image+'"><i class="fas fa-search-plus icon"></i></a>'
                                         +'</div>'
                                     +'</div>'
                                 +'</div>');
@@ -105,6 +109,11 @@ function createView(selected){
 
 //paging
 function pageUpdate(page){
+
+    //set active page
+    $('.page-link').removeClass('active');
+    let link = "#page-link-"+page.toString();
+    let page_link = $(link).addClass('active');
 
     //truncate results
     let results = $('#results');
@@ -131,7 +140,7 @@ function pageUpdate(page){
                 results.append('<div class="col-xl-3 col-md-6 mb-4">'
                                     +'<div class="card border-0 shadow">'
                                         +'<div class="bg-image" style="background-image: url('+image+');">'
-                                            +'<a data-lity href="'+image+'"></a>'
+                                            +'<a data-lity href="'+image+'"><i class="fas fa-search-plus icon"></i></a>'
                                         +'</div>'
                                     +'</div>'
                                 +'</div>');

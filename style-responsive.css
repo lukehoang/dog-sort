@@ -1,0 +1,13 @@
+@media screen and (max-width: 1200px){
+    .bg-image{
+        height: 250px;
+    }
+}
+
+
+
+@media screen and (max-width: 768px){
+    .bg-image{
+        height: 280px;
+    }
+}
