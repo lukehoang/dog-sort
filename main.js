@@ -38,6 +38,7 @@ $(document).ready(function(){
     createView(selected);
 });
 
+//Breeds list on selected
 $(document).ready(function(){
     $('#breeds_list').on('change', function(){
         //selected value
@@ -47,7 +48,7 @@ $(document).ready(function(){
 });
 
 
-
+//Function to re-render the view
 function createView(selected){
     let results = $('#results');
     results.html("");
@@ -102,7 +103,7 @@ function createView(selected){
 
 
 
-//paging
+//function for paging
 function pageUpdate(page){
 
     //set active page
