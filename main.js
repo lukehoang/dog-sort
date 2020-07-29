@@ -1,8 +1,3 @@
-//Magnific Popup init
-// $(document).ready(function() {
-//     $('.image-lightbox').magnificPopup({type:'image'});
-// });
-
 //Create Breeds list
 $(document).ready(function(){
 
