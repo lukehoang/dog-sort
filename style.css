@@ -1,0 +1,19 @@
+/* 
+Author: Luke Hoang
+Date: 07-28-2020
+Ver: 1.0v
+Project: XDS Coding Assessment
+*/
+
+
+/* General */
+
+img{
+    width: 100%;
+}
+.bg-image{
+    width: 100%;
+    height: 230px;
+    background-size: cover;
+    background-position: center;
+}
