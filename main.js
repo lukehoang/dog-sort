@@ -1,3 +1,8 @@
+//Magnific Popup init
+// $(document).ready(function() {
+//     $('.image-lightbox').magnificPopup({type:'image'});
+// });
+
 //Create Breeds list
 $(document).ready(function(){
 
@@ -12,7 +17,7 @@ $(document).ready(function(){
             //empty array
             let newData = [];
             
-            //manipulate the DOM to create a dropdown list of breeds
+            //re-render the DOM to create a dropdown list of breeds
             for(var i in thisData){
                 if(thisData[i].length>0){
                     thisData[i].forEach(element => {
@@ -34,10 +39,27 @@ $(document).ready(function(){
 
 //Default: display images of "Affenpinscher"
 $(document).ready(function(){
+    let selected = "affenpinscher";
+    createView(selected);
+});
+
+$(document).ready(function(){
+    $('#breeds_list').on('change', function(){
+        //selected value
+        let selected = this.value;
+        createView(selected);
+    });
+});
+
+
+
+function createView(selected){
     let results = $('#results');
+    results.html("");
+    //get request
     $.ajax({
         type: "get",
-        url: "https://dog.ceo/api/breed/affenpinscher/images",
+        url: "https://dog.ceo/api/breed/"+selected.replace('-', '/')+"/images",
         success: function(data) {
 
             //Json data
@@ -45,15 +67,30 @@ $(document).ready(function(){
 
             //conditions
             let length = dogData.length;
+
             if(dogData.length>8){
                 length = 8;
+                //create pagination when there are more than 8 images in the collections
+                let number_of_pages = (dogData.length - dogData.length % 8) / 8 + 1;
+                $('#pagination').html("");
+                $('#pagination').removeClass('d-none');
+                for(let i = 1; i <= number_of_pages; i++){
+                    $('#pagination').append('<li class="page-item"><a class="page-link" onclick="pageUpdate(' + i + ');">' + i + '</a></li>');
+                }
+
+            }else{
+                //hide pagination when there are less then 8 images in the collections
+                $('#pagination').addClass('d-none');
             }
 
+            ///re-render the DOM
             for(let i = 0; i < length; i++ ){
                 let image = dogData[i];
                 results.append('<div class="col-xl-3 col-md-6 mb-4">'
                                     +'<div class="card border-0 shadow">'
                                         +'<div class="bg-image" style="background-image: url('+image+');">'
+                                            +'<a data-lity href="'+image+'"></a>'
+                                        +'</div>'
                                     +'</div>'
                                 +'</div>');
             }
@@ -62,61 +99,47 @@ $(document).ready(function(){
             console.log(err);
         }
     }); //end ajax
-});
+}
 
 
 
-$(document).ready(function(){
-    $('#breeds_list').on('change', function(){
+//paging
+function pageUpdate(page){
 
-        //selected value
-        let selected = this.value;
-        // //get page
-        // let current_url = window.location.href;
-        // let url = new URL(current_url);
-        // let page = url.searchParams.get("page");
+    //truncate results
+    let results = $('#results');
+    results.html("");
 
-        // //set page
-        // if(!page){
-        //     page = 1;
-        // }else{
-        //     page = Number(page)+1;
-        // }
-        
-        // window.history.replaceState(null, null, "?page="+page.toString());
-
-        let results = $('#results');
-        results.html("");
-        
-        //get request
-        $.ajax({
-            type: "get",
-            url: "https://dog.ceo/api/breed/"+selected.replace('-', '/')+"/images",
-            success: function(data) {
-
-                //Json data
-                let dogData = data.message;
-
-                //conditions
-                let length = dogData.length;
-                if(dogData.length>8){
-                    length = 8;
-                }
-
-                for(let i = 0; i < length; i++ ){
-                    let image = dogData[i];
-                    results.append('<div class="col-xl-3 col-md-6 mb-4">'
-                                        +'<div class="card border-0 shadow">'
-                                            +'<div class="bg-image" style="background-image: url('+image+');">'
-                                        +'</div>'
-                                    +'</div>');
-                }
-            },
-            error: function(err){
-                console.log(err);
+    //get current breed selected
+    let selected = $('#breeds_list').val();
+   
+    //re-render the DOM
+    $.ajax({
+        type: "get",
+        url: "https://dog.ceo/api/breed/"+selected.replace('-', '/')+"/images",
+        success: function(data) {
+            let dogData = data.message;
+            let i = 0;
+            let length = 8;
+            if(page > 1){
+                length = page*8;
+                i = length - 8;
             }
-        }); //end ajax
-        
-        
-    });
-});
+            for(i; i<length; i++ ){
+                if(dogData[i] != undefined){
+                let image = dogData[i];
+                results.append('<div class="col-xl-3 col-md-6 mb-4">'
+                                    +'<div class="card border-0 shadow">'
+                                        +'<div class="bg-image" style="background-image: url('+image+');">'
+                                            +'<a data-lity href="'+image+'"></a>'
+                                        +'</div>'
+                                    +'</div>'
+                                +'</div>');
+                }
+            }
+        },
+        error: function(err){
+            console.log(err);
+        }
+    }); //end ajax
+}
